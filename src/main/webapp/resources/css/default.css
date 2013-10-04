@@ -1,0 +1,33 @@
+body {
+    line-height: 30px;
+    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+.container-fluid {
+    margin-top: 20px;
+}
+.table input {
+    margin-bottom: 0px;
+}
+
+.table th.txt_c, .table td.txt_c {
+    text-align: center;
+}
+
+.table th.txt_r, .table td.txt_r {
+    text-align: right;
+}
+
+.table th.txt_l, .table td.txt_l{
+    text-align: left;
+}
+
+h3.title {
+    background-image: url("../img/bullet.png");
+    background-repeat: no-repeat;
+    padding: 0 0 0 10px;
+    font-size: 25pt;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
