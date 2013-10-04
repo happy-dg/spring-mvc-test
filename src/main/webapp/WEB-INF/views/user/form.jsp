@@ -8,7 +8,7 @@
 
 <layout:body>
 
-    <h3 class="method-title"></h3>
+    <h3 class="title method-title"></h3>
     <spring:url value="/user" var="action" />
 
 
@@ -18,33 +18,33 @@
         <input type="hidden" name="id" value="${userForm.id}" />
     </c:if>
 
-        <table class="table table-bordered">
+        <table class="table table-bordered mt20">
         <colgroup>
             <col width="100px" />
             <col />
         </colgroup>
             <tr>
-                <th>이름</th>
+                <th class="txt_c">이름</th>
                 <td>
-                        <form:input path="name" cssClass="input-medium" />
+                        <form:input path="name" cssClass="input-medium" placeholder="name"/>
                         <form:errors path="name" cssClass="error" />
                 </td>
             </tr>
             <tr>
-                <th>나이</th>
+                <th class="txt_c">나이</th>
                 <td>
-                    <form:input path="age" cssClass="input-medium"/>
+                    <form:input path="age" cssClass="input-medium" placeholder="age"/>
                     <form:errors path="age" cssClass="error" />
                 </td>
             </tr>
             <tr>
-                <th>성별</th>
+                <th class="txt_c">성별</th>
                 <td>
                     <label class="radio inline">
                         <form:radiobutton path="sex" value="MALE" />남
                     </label>
                     <label class="radio inline">
-                        <form:radiobutton path="sex" value="FEMALE" /> 여
+                        <form:radiobutton path="sex" value="FEMALE" />여
                     </label>
                     <form:errors path="sex" cssClass="error" />
                 </td>
