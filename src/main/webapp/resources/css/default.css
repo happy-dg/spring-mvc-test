@@ -8,7 +8,10 @@ body {
 .table input {
     margin-bottom: 0px;
 }
+.table th {
+    background-color: #F5F5F5;
 
+}
 .table th.txt_c, .table td.txt_c {
     text-align: center;
 }
