@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties version="1.0">
+    <comment>IPAMS 메시지</comment>
+
+    <!-- default message -->
+    <entry key="NotNull">필수로 입력해야 합니다.</entry>
+    <entry key="NotEmpty">필수로 입력해야 합니다.</entry>
+    <entry key="Pattern">입력 형식이 잘못되었습니다.</entry>
+    <entry key="NotSpecialCharacter">특수문자({1})는 입력할 수 없습니다.</entry>
+    <entry key="Max">입력이 잘못되었습니다.</entry>
+    <entry key="Duplicate">중복된 데이터가 존재합니다.</entry>
+
+    <entry key="OnlyNumber">숫자만 입력해야 합니다.</entry>
+    <entry key="Email">올바른 이메일 주소가 아닙니다.</entry>
+    <entry key="ZipCode">올바른 우편번호가 아닙니다. (ex. 110-044)</entry>
+    <entry key="PhoneLength">{3}는 {2}자리 이상 {1}자리 이하여야 합니다.</entry>
+    <entry key="FixLength">{2}는 {1}자리여야 합니다.</entry>
+    <entry key="Length">{2}자리 이상 {1}자리 이하여야 합니다.</entry>
+
+    <entry key="IllegalArgumentException">입력이 잘못되었습니다.</entry>
+
+
+    <entry key="user.add">[{0}] 사용자가 등록 되었습니다.</entry>
+    <entry key="user.update">[{0}] 사용자의 정보가 수정 되었습니다.</entry>
+    <entry key="user.delete">[{0}] 사용자가 삭제 되었습니다.</entry>
+
+
+    <entry key="user.not.find"></entry>
+    <entry key=""></entry>
+
+</properties>
