@@ -9,16 +9,16 @@
 
 <layout:body>
 
-    <h3>목록</h3>
-    <div class="row-fluid">
+    <h3 class="title">목록</h3>
+    <div class="row-fluid mt20">
     <div class="span12">
-        <a class="btn pull-right" style="margin-bottom: 5px;" href="<spring:url value="/user/new" />">신규등록</a>
+        <a class="btn btn-primary pull-right" style="margin-bottom: 5px;" href="<spring:url value="/user/new" />">신규등록</a>
     </div>
     </div>
 
-    <div class="row-fluid">
+    <div class="row-fluid mt20">
     <div class="span12">
-        <table class="table table-hover">
+        <table class="table table-bordered table-hover">
             <colgroup>
                 <col style="width: 50px;">
                 <col>
@@ -31,7 +31,7 @@
                 <th class="txt_c">이름</th>
                 <th class="txt_c">나이</th>
                 <th class="txt_c">성별</th>
-                <th></th>
+                <th class="txt_c">비고</th>
             </thead>
             <tbody>
             <c:forEach items="${users}" var="user" varStatus="status">
