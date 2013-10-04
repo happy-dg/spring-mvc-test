@@ -73,6 +73,33 @@ public class ITUserControllerTest {
 
     @Test
     @ExpectedDatabase("userData.xml")
+    public void rest_FindAll_ShouldAddUsersToJsonList() throws Exception {
+
+        mockMvc.perform(get("/user/api"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$", hasSize(5)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].name", is("이남희")))
+                .andExpect(jsonPath("$[0].age", is(36)))
+                .andExpect(jsonPath("$[0].sex", is("MALE")))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[1].name", is("신재근")))
+                .andExpect(jsonPath("$[1].age", is(34)))
+                .andExpect(jsonPath("$[1].sex", is("MALE")))
+                .andExpect(jsonPath("$[2].id", is(3)))
+                .andExpect(jsonPath("$[2].name", is("김용훈")))
+                .andExpect(jsonPath("$[2].age", is(34)))
+                .andExpect(jsonPath("$[2].sex", is("MALE")))
+                .andExpect(jsonPath("$[3].id", is(4)))
+                .andExpect(jsonPath("$[3].name", is("손지성")))
+                .andExpect(jsonPath("$[3].age", is(30)))
+                .andExpect(jsonPath("$[3].sex", is("MALE")));
+    }
+
+
+    @Test
+    @ExpectedDatabase("userData.xml")
     public void showAddUserForm_ShouldCreateUserFormAndRederAddUserForm() throws Exception {
         mockMvc.perform(get("/user/new"))
                 .andExpect(status().isOk())

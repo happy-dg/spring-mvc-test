@@ -82,6 +82,41 @@ public class WebAppContextUserControllerTest {
 
     }
 
+    @Test
+    public void rest_FindAll_ShouldAddUsersToJsonList() throws Exception {
+
+        User lee = new UserBuilder().id(1l).name("이남희").age(36).sex(Sex.MALE).build();
+        User shin = new UserBuilder().id(2l).name("신재근").age(34).sex(Sex.MALE).build();
+        User kim = new UserBuilder().id(3l).name("김용훈").age(34).sex(Sex.MALE).build();
+        User son = new UserBuilder().id(4l).name("손지성").age(30).sex(Sex.MALE).build();
+
+        when(userService.findAll()).thenReturn(Lists.<User>newArrayList(lee,shin,kim,son));
+
+        mockMvc.perform(get("/user/api"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$", hasSize(4)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].name", is("이남희")))
+                .andExpect(jsonPath("$[0].age", is(36)))
+                .andExpect(jsonPath("$[0].sex", is("MALE")))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[1].name", is("신재근")))
+                .andExpect(jsonPath("$[1].age", is(34)))
+                .andExpect(jsonPath("$[1].sex", is("MALE")))
+                .andExpect(jsonPath("$[2].id", is(3)))
+                .andExpect(jsonPath("$[2].name", is("김용훈")))
+                .andExpect(jsonPath("$[2].age", is(34)))
+                .andExpect(jsonPath("$[2].sex", is("MALE")))
+                .andExpect(jsonPath("$[3].id", is(4)))
+                .andExpect(jsonPath("$[3].name", is("손지성")))
+                .andExpect(jsonPath("$[3].age", is(30)))
+                .andExpect(jsonPath("$[3].sex", is("MALE")));
+
+        verify(userService, times(1)).findAll();
+        verifyZeroInteractions(userService);
+    }
+
 
     @Test
     public void add_EmptyUser_ShouldRenderformViewAndReturnValidationErrorForName() throws Exception {

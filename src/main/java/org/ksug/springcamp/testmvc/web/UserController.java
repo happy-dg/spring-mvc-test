@@ -1,5 +1,6 @@
 package org.ksug.springcamp.testmvc.web;
 
+import com.google.common.collect.Lists;
 import org.ksug.springcamp.testmvc.core.domain.User;
 import org.ksug.springcamp.testmvc.core.service.UserService;
 import org.ksug.springcamp.testmvc.web.dto.UserDto;
@@ -11,10 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -58,9 +61,20 @@ public class UserController {
     }
 
 
+    @RequestMapping(value = "api", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public List<UserDto> apiList() {
+        List<UserDto> userDtos = Lists.newArrayList();
+        for( User user : userService.findAll() )
+            userDtos.add(new UserDto(user));
+
+        return userDtos;
+    }
+
     @RequestMapping(value="new", method = RequestMethod.GET)
-    public String viewAddForm(@ModelAttribute(MODEL_ATTRIBUTE_USER_FORM) UserDto form) {
+    public String viewAddForm(Model model) {
         log.debug("사용자 등록 화면 반환");
+        model.addAttribute(MODEL_ATTRIBUTE_USER_FORM, new UserDto());
         return VIEW_USER_FORM;
     }
 
@@ -68,6 +82,7 @@ public class UserController {
     public String add(
             @ModelAttribute(MODEL_ATTRIBUTE_USER_FORM) @Valid UserDto form,
             BindingResult result,
+            SessionStatus status,
             RedirectAttributes attributes
     ) {
         log.debug("사용자 등록 : {}", form);
@@ -77,8 +92,8 @@ public class UserController {
         }
 
         User addedUser = userService.add(form);
-
         addFeedbackMessage(attributes, "user.add", addedUser.getName());
+        status.setComplete();
 
         return createRedirectViewPath("/user");
     }
@@ -87,10 +102,7 @@ public class UserController {
     public String viewUpdateForm(@PathVariable Long id, Model model) {
 
         User updateUser = userService.findById(id);
-
         model.addAttribute(MODEL_ATTRIBUTE_USER_FORM, new UserDto(updateUser));
-
-
         return VIEW_USER_FORM;
     }
 
@@ -98,6 +110,7 @@ public class UserController {
     public String update(
             @ModelAttribute(MODEL_ATTRIBUTE_USER_FORM) @Valid UserDto form,
             BindingResult result,
+            SessionStatus status,
             RedirectAttributes attributes
     ) {
 
@@ -105,9 +118,8 @@ public class UserController {
             return VIEW_USER_FORM;
 
         User updatedUser = userService.update(form);
-
         addFeedbackMessage(attributes, "user.update", updatedUser.getName());
-
+        status.setComplete();
         return createRedirectViewPath("/user");
     }
 
