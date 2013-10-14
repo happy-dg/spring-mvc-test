@@ -4,8 +4,8 @@ import geb.Page
 
 class UserList extends Page{
     static url = "/user"
-    static at = {}
+    static at = { title == "Spring-MVC-Test" }
     static content = {
-        header {$("h3").text()}
+        header {}
     }
 }

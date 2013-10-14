@@ -1,6 +1,6 @@
-import org.openqa.selenium.firefox.FirefoxDriver
-
 driver = { new FirefoxDriver() }
+
+import org.openqa.selenium.firefox.FirefoxDriver
 
 baseUrl = "http://localhost:8080"
 

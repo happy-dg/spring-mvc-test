@@ -13,9 +13,9 @@ class UserIT extends GebReportingSpec{
         to Form
 
         when :
-        nameField = "test";
-        ageField = "24";
-        sexField = "MALE";
+        nameField = "문채원";
+        ageField = "26";
+        sexField = "FEMALE";
         submitButton.click();
 
         then :

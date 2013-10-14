@@ -2,6 +2,7 @@ package org.ksug.springcamp.testmvc.web;
 
 
 import com.google.common.collect.Lists;
+import groovy.util.Eval;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,6 +78,7 @@ public class WebAppContextUserControllerTest {
                         hasProperty("sex", is(Sex.MALE))
                 )
                 )));
+
         verify(userService, times(1)).findAll();
         verifyNoMoreInteractions(userService);
 
@@ -85,10 +87,10 @@ public class WebAppContextUserControllerTest {
     @Test
     public void rest_FindAll_ShouldAddUsersToJsonList() throws Exception {
 
-        User lee = new UserBuilder().id(1l).name("이남희").age(36).sex(Sex.MALE).build();
-        User shin = new UserBuilder().id(2l).name("신재근").age(34).sex(Sex.MALE).build();
-        User kim = new UserBuilder().id(3l).name("김용훈").age(34).sex(Sex.MALE).build();
-        User son = new UserBuilder().id(4l).name("손지성").age(30).sex(Sex.MALE).build();
+        User lee = new UserBuilder().id(1l).name("박용권").age(34).sex(Sex.MALE).build();
+        User shin = new UserBuilder().id(2l).name("김효영").age(34).sex(Sex.FEMALE).build();
+        User kim = new UserBuilder().id(3l).name("김지헌").age(33).sex(Sex.MALE).build();
+        User son = new UserBuilder().id(4l).name("장원호").age(28).sex(Sex.MALE).build();
 
         when(userService.findAll()).thenReturn(Lists.<User>newArrayList(lee,shin,kim,son));
 
@@ -97,20 +99,20 @@ public class WebAppContextUserControllerTest {
                 .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(4)))
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].name", is("이남희")))
-                .andExpect(jsonPath("$[0].age", is(36)))
+                .andExpect(jsonPath("$[0].name", is("박용권")))
+                .andExpect(jsonPath("$[0].age", is(34)))
                 .andExpect(jsonPath("$[0].sex", is("MALE")))
                 .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].name", is("신재근")))
+                .andExpect(jsonPath("$[1].name", is("김효영")))
                 .andExpect(jsonPath("$[1].age", is(34)))
-                .andExpect(jsonPath("$[1].sex", is("MALE")))
+                .andExpect(jsonPath("$[1].sex", is("FEMALE")))
                 .andExpect(jsonPath("$[2].id", is(3)))
-                .andExpect(jsonPath("$[2].name", is("김용훈")))
-                .andExpect(jsonPath("$[2].age", is(34)))
+                .andExpect(jsonPath("$[2].name", is("김지헌")))
+                .andExpect(jsonPath("$[2].age", is(33)))
                 .andExpect(jsonPath("$[2].sex", is("MALE")))
                 .andExpect(jsonPath("$[3].id", is(4)))
-                .andExpect(jsonPath("$[3].name", is("손지성")))
-                .andExpect(jsonPath("$[3].age", is(30)))
+                .andExpect(jsonPath("$[3].name", is("장원호")))
+                .andExpect(jsonPath("$[3].age", is(28)))
                 .andExpect(jsonPath("$[3].sex", is("MALE")));
 
         verify(userService, times(1)).findAll();
@@ -139,9 +141,7 @@ public class WebAppContextUserControllerTest {
 
     @Test
     public void add_NewUser_ShouldAddUserAndRenderViewUserView() throws Exception {
-
         UserDto formUser = new UserDtoBuilder().name("이현아").age(22).sex(Sex.FEMALE).build();
-
         User addedUser = new UserBuilder().id(1l)
                 .name(formUser.getName())
                 .age(formUser.getAge())
@@ -150,7 +150,7 @@ public class WebAppContextUserControllerTest {
 
         when(userService.add(formUser)).thenReturn(addedUser);
 
-        String expectedRedirectViewPath = TestUtil.createRedirectViewPath("/user");
+        String expectedRedirectViewPath = "redirect:/user";
         String message = getMessage("user.add", new Object[]{formUser.getName()});
 
         mockMvc.perform(post("/user")
@@ -165,23 +165,25 @@ public class WebAppContextUserControllerTest {
 
         verify(userService, times(1)).add(formUser);
         verifyNoMoreInteractions(userService);
-
     }
 
     @Test
     public void showUpdateUserForm_UserFound_ShouldCreateUserFormAndRenderUpdateUserView() throws Exception {
-        User tempUser = new UserBuilder().id(1l).name("박용권").age(34).sex(Sex.MALE).build();
+        User tempUser = new UserBuilder().id(5l).name("이현아").age(22).sex(Sex.FEMALE).build();
 
-        when(userService.findById(1l)).thenReturn(tempUser);
+        when(userService.findById(5l)).thenReturn(tempUser);
 
-        mockMvc.perform(get("/user/update/{id}", 1l))
+        mockMvc.perform(get("/user/update/{id}", 5l))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/views/user/form.jsp"))
-                .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_FORM, hasProperty("name", is(tempUser.getName()))))
-                .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_FORM, hasProperty("age", is(tempUser.getAge()))))
-                .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_FORM, hasProperty("sex", is(tempUser.getSex()))));
+                .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_FORM,
+                        hasProperty("name", is(tempUser.getName()))))
+                .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_FORM,
+                        hasProperty("age", is(tempUser.getAge()))))
+                .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_FORM,
+                        hasProperty("sex", is(tempUser.getSex()))));
 
-        verify(userService, times(1)).findById(1l);
+        verify(userService, times(1)).findById(5l);
         verifyZeroInteractions(userService);
     }
 
@@ -207,10 +209,10 @@ public class WebAppContextUserControllerTest {
 
     @Test
     public void update_UserFound_ShouldUpdateUserAndRenderViewUserView() throws Exception {
-        UserDto formUser = new UserDtoBuilder().id(1l).name("장원호").age(28).sex(Sex.MALE).build();
+        UserDto formUser = new UserDtoBuilder().id(5l).name("이현아").age(29).sex(Sex.FEMALE).build();
         User user = new UserBuilder().id(formUser.getId()).name(formUser.getName()).age(formUser.getAge()).sex(formUser.getSex()).build();
 
-        when(userService.findById(1l)).thenReturn(user);
+        when(userService.findById(5l)).thenReturn(user);
         when(userService.update(formUser)).thenReturn(user);
 
         String expectedRedirectViewPath = TestUtil.createRedirectViewPath("/user");
@@ -221,7 +223,8 @@ public class WebAppContextUserControllerTest {
         )
                 .andExpect(status().isMovedTemporarily())
                 .andExpect(view().name(expectedRedirectViewPath))
-                .andExpect(flash().attribute(UserController.FLASH_MESSAGE_KEY_FEEDBACK, is(getMessage("user.update", new Object[]{formUser.getName()}))));
+                .andExpect(flash().attribute(UserController.FLASH_MESSAGE_KEY_FEEDBACK,
+                        is(getMessage("user.update", new Object[]{formUser.getName()}))));
     }
 
     @Test
@@ -233,7 +236,8 @@ public class WebAppContextUserControllerTest {
         mockMvc.perform(delete("/user/{id}", 1l))
                 .andExpect(status().isMovedTemporarily())
                 .andExpect(view().name(TestUtil.createRedirectViewPath("/user")))
-                .andExpect(flash().attribute(UserController.FLASH_MESSAGE_KEY_FEEDBACK, is(getMessage("user.delete", new Object[]{user.getName()}))));
+                .andExpect(flash().attribute(UserController.FLASH_MESSAGE_KEY_FEEDBACK,
+                        is(getMessage("user.delete", new Object[]{user.getName()}))));
 
         verify(userService, times(1)).delete(1l);
         verifyZeroInteractions(userService);

@@ -64,8 +64,15 @@ public class ITUserControllerTest {
                 .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_LIST, hasItem(
                         allOf(
                                 hasProperty("id", is(1l)),
-                                hasProperty("name", is("이남희")),
+                                hasProperty("name", is("박용권")),
                                 hasProperty("sex", is(Sex.MALE))
+                        )
+                )))
+                .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_LIST, hasItem(
+                        allOf(
+                                hasProperty("id", is(2l)),
+                                hasProperty("name", is("김효영")),
+                                hasProperty("sex", is(Sex.FEMALE))
                         )
                 )));
     }
@@ -80,20 +87,20 @@ public class ITUserControllerTest {
                 .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(5)))
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].name", is("이남희")))
-                .andExpect(jsonPath("$[0].age", is(36)))
+                .andExpect(jsonPath("$[0].name", is("박용권")))
+                .andExpect(jsonPath("$[0].age", is(34)))
                 .andExpect(jsonPath("$[0].sex", is("MALE")))
                 .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].name", is("신재근")))
+                .andExpect(jsonPath("$[1].name", is("김효영")))
                 .andExpect(jsonPath("$[1].age", is(34)))
-                .andExpect(jsonPath("$[1].sex", is("MALE")))
+                .andExpect(jsonPath("$[1].sex", is("FEMALE")))
                 .andExpect(jsonPath("$[2].id", is(3)))
-                .andExpect(jsonPath("$[2].name", is("김용훈")))
-                .andExpect(jsonPath("$[2].age", is(34)))
+                .andExpect(jsonPath("$[2].name", is("김지헌")))
+                .andExpect(jsonPath("$[2].age", is(33)))
                 .andExpect(jsonPath("$[2].sex", is("MALE")))
                 .andExpect(jsonPath("$[3].id", is(4)))
-                .andExpect(jsonPath("$[3].name", is("손지성")))
-                .andExpect(jsonPath("$[3].age", is(30)))
+                .andExpect(jsonPath("$[3].name", is("장원호")))
+                .andExpect(jsonPath("$[3].age", is(28)))
                 .andExpect(jsonPath("$[3].sex", is("MALE")));
     }
 
@@ -151,15 +158,17 @@ public class ITUserControllerTest {
                 .andExpect(flash().attribute(UserController.FLASH_MESSAGE_KEY_FEEDBACK, is(message)));
     }
 
+
+
     @Test
     @ExpectedDatabase("userData.xml")
     public void showUpdateUserForm_UserFound_ShouldCreateUserFormAndRenderUpdateUserView() throws Exception {
         mockMvc.perform(get("/user/update/{id}", 2l))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/views/user/form.jsp"))
-                .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_FORM, hasProperty("name", is("신재근"))))
+                .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_FORM, hasProperty("name", is("김효영"))))
                 .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_FORM, hasProperty("age", is(34))))
-                .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_FORM, hasProperty("sex", is(Sex.MALE))));
+                .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_FORM, hasProperty("sex", is(Sex.FEMALE))));
 
     }
 
@@ -167,7 +176,7 @@ public class ITUserControllerTest {
     @ExpectedDatabase("userData.xml")
     public void update_EmptyUser_ShouldRenderFormViewAndReturnValidationErrorForAgeAndSex() throws Exception {
         UserDto formUser = new UserDto();
-        formUser.setName("김효영");
+        formUser.setName("aO_Ob");
 
         mockMvc.perform(put("/user")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -188,10 +197,10 @@ public class ITUserControllerTest {
     @Test
     @ExpectedDatabase("userData-update.xml")
     public void update_UserFound_ShouldUpdateUserAndRenderViewUserView() throws Exception {
-        UserDto formUser = new UserDtoBuilder().id(5l).name("장원호").age(28).sex(Sex.MALE).build();
+        UserDto formUser = new UserDtoBuilder().id(5l).name("이윤주").age(26).sex(Sex.FEMALE).build();
 
         String expectedRedirectViewPath = TestUtil.createRedirectViewPath("/user");
-        String message = "[장원호] 사용자의 정보가 수정 되었습니다.";
+        String message = "[이윤주] 사용자의 정보가 수정 되었습니다.";
 
         mockMvc.perform(put("/user")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)

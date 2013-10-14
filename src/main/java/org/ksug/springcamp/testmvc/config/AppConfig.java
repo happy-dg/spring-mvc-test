@@ -1,39 +1,35 @@
 package org.ksug.springcamp.testmvc.config;
 
 
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
-import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import javax.servlet.Filter;
 
-public class AppConfig implements WebApplicationInitializer{
-    private static final String DISPATCHER_SERVLET_NAME = "dispatcher";
+public class AppConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
     private static final String DISPATCHER_SERVLET_MAPPING = "/";
+    @Override
+
+    protected String[] getServletMappings() {
+        return new String[]{DISPATCHER_SERVLET_MAPPING};
+    }
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(AppContext.class);
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class<?>[]{AppContext.class};
+    }
 
-        new HiddenHttpMethodFilter();
-        //XmlWebApplicationContext rootContext = new XmlWebApplicationContext();
-        //rootContext.setConfigLocation("classpath:exampleApplicationContext.xml");
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class<?>[]{WebAppContext.class};
+    }
 
-        ServletRegistration.Dynamic dispatcher = servletContext.addServlet(DISPATCHER_SERVLET_NAME, new DispatcherServlet(rootContext));
-        dispatcher.setLoadOnStartup(1);
-        dispatcher.addMapping(DISPATCHER_SERVLET_MAPPING);
+    @Override
+    protected Filter[] getServletFilters() {
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding("utf-8");
 
-        servletContext.addListener(new ContextLoaderListener(rootContext));
-
-        FilterRegistration.Dynamic hiddenHttpMethodFilter =
-                servletContext.addFilter("hiddenHttpMethodFilter", HiddenHttpMethodFilter.class);
-        hiddenHttpMethodFilter.addMappingForUrlPatterns(null, false, "/*");
-
+        return new Filter[] { characterEncodingFilter, new HiddenHttpMethodFilter() };
     }
 }
