@@ -1,5 +1,6 @@
 package org.ksug.springcamp.testmvc.core.service;
 
+import com.mysema.query.types.Predicate;
 import org.ksug.springcamp.testmvc.core.domain.User;
 import org.ksug.springcamp.testmvc.core.exception.UserNotFindException;
 import org.ksug.springcamp.testmvc.core.repository.UserRepository;
@@ -53,6 +54,11 @@ public class DefaultUserService implements UserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public Iterable<User> findAll(Predicate predicate) {
+        return userRepository.findAll(predicate);
     }
 
     private User save(User user) {

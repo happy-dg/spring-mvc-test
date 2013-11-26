@@ -1,5 +1,7 @@
 package org.ksug.springcamp.testmvc.core.service;
 
+import com.mysema.query.BooleanBuilder;
+import com.mysema.query.types.Predicate;
 import org.ksug.springcamp.testmvc.core.domain.User;
 import org.ksug.springcamp.testmvc.web.dto.UserDto;
 
@@ -16,4 +18,5 @@ public interface UserService {
 
     List<User> findAll();
 
+    Iterable<User> findAll(Predicate predicate);
 }

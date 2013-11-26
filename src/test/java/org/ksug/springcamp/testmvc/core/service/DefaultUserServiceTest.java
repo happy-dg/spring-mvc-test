@@ -1,9 +1,12 @@
 package org.ksug.springcamp.testmvc.core.service;
 
+import com.google.common.collect.Lists;
+import com.mysema.query.BooleanBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ksug.springcamp.testmvc.config.TestPersistenceContext;
+import org.ksug.springcamp.testmvc.core.domain.QUser;
 import org.ksug.springcamp.testmvc.core.domain.Sex;
 import org.ksug.springcamp.testmvc.core.domain.User;
 import org.ksug.springcamp.testmvc.core.exception.UserNotFindException;
@@ -37,6 +40,23 @@ public class DefaultUserServiceTest {
         dto = newUserDto();
         user = createUser(dto);
     }
+
+    @Test
+    public void test() {
+        assertCheckUserSize("이현", 1);
+        assertCheckUserSize("empty", 0);
+    }
+
+    private void assertCheckUserSize(String findName, int resultSize) {
+        QUser $user = QUser.user;
+        BooleanBuilder predicate = new BooleanBuilder();
+        predicate.and($user.name.contains(findName));
+
+        List<User> users = Lists.newArrayList(userService.findAll(predicate));
+
+        assertEquals(resultSize, users.size());
+    }
+
 
     @Test
     public void list_userListIsNotEmpty() {

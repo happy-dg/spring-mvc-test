@@ -2,7 +2,6 @@ package org.ksug.springcamp.testmvc.web;
 
 
 import com.google.common.collect.Lists;
-import groovy.util.Eval;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +27,6 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.inject.Inject;
 
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -72,12 +70,11 @@ public class WebAppContextUserControllerTest {
                 .andExpect(forwardedUrl("/WEB-INF/views/user/list.jsp"))
                 .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_LIST, hasSize(4)))
                 .andExpect(model().attribute(UserController.MODEL_ATTRIBUTE_USER_LIST, hasItem(
-                allOf(
-                        hasProperty("id", is(1l)),
-                        hasProperty("name", is("이남희")),
-                        hasProperty("sex", is(Sex.MALE))
-                )
+                        allOf(
+                            hasProperty("name", is("이남희"))
+                        )
                 )));
+
 
         verify(userService, times(1)).findAll();
         verifyNoMoreInteractions(userService);
